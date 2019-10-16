@@ -1,0 +1,32 @@
+version: "3.6"                        #Utilisant Docker avec Docker Toolbox ceci est la version que je dois utiliser. 
+services: 
+
+  apache:                             #Container de l'image php7.2-apache
+    image: php:7.2-apache             
+    volumes: 
+      - ./:/var/www/html/             #C'est grace à cela que le volume partagé de "index.php" se crée. 
+    ports: 
+      - 8082:80                       
+
+  mariadb:                            #Container de l'image mariadb
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root 
+      - MYSQL_DATABASE=bd
+  
+  phpmyadmin:                         #Container de l'image phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=mariadb
+    ports:
+      - 8080:80
+    depends_on:
+      - mariadb
+    
+  mailhog:                            #Container de l'image mailhog 
+    image: mailhog/mailhog
+    ports: 
+      - 1025:1025 
+      - 8025:8025 
+
+  
